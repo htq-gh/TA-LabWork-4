@@ -15,9 +15,9 @@ def primary_hash(key: str) -> int:
     print(f"Сума позицій літер:", end="")
     for char in key:
         position = LETTER_POSITIONS.get(char, 0)
-        print(f"{position}", end=" + ")
+        print(f" {position}", end=" +")
         sum_of_positions += position
-    print(f"\b\b= {sum_of_positions}")
+    print(f"\b= {sum_of_positions}")
     print(f"Визначення хеш-адреси: {sum_of_positions} % {M} = {sum_of_positions % M}")
     return sum_of_positions % M
 
