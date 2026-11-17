@@ -1,3 +1,4 @@
+
 M = 13
 
 WORDS = ["БІЛЬШЕ", "ДІЛА", "МЕНШЕ", "СЛІВ", "ОТАК", "ДОБУДЕШ", "ХЛІБ"]
@@ -10,36 +11,49 @@ LETTER_POSITIONS = {
     'Ш': 29, 'Щ': 30, 'Ь': 31, 'Ю': 32, 'Я': 33
 }
 
-def primary_hash(key: str) -> int:
+
+def simple_hash_from_map(key: str) -> int:
     sum_of_positions = 0
+    print(f"Сума позицій літер:", end="")
     for char in key:
         position = LETTER_POSITIONS.get(char, 0)
+        print(f" {position}", end=" +")
         sum_of_positions += position
-    return sum_of_positions % M
-    
-def build_closed_hash_table(words: list, m: int) -> list:
-    hash_table = [None] * m
-    inserted_count = 0
+        hash_address = sum_of_positions % M
+    print(f"\b= {sum_of_positions}")
+    print(f"Визначення хеш-адреси: {sum_of_positions} % {M} = {hash_address}")
+    return hash_address
+
+
+def build_open_hash_table(words: list, m: int) -> list:
+    hash_table = [[] for _ in range(m)]
+    print(f"\nСтворення порожньої хеш-таблиці:")
+    print(hash_table)
     for word in words:
-        start_address = primary_hash(word)
-        address = start_address
-        for i in range(m):
-            address = (start_address + i) % m
-            if hash_table[address] is None:
-                hash_table[address] = word
-                inserted_count += 1
-                break
-            else:
-                print(f"Помилка: Таблиця заповнена. Не вдалося додати слово: {word}")
+        print("\n----------------------------------------------------")
+        print(f"Поточне слово: {word}")
+        address = simple_hash_from_map(word)
+        print(f"Вміст комірки {address}: {hash_table[address]}")
+        if hash_table[address]:
+            print("Виявлено колізію!")
+            print(f"У комірці {address} вже знаходяться слова: {hash_table[address]}")
+            print("Нове слово буде додано до існуючого списку.")
+        else:
+            print(f"Комірка {address} порожня. Колізії немає.")
+        hash_table[address].append(word)
+        print(f"Слово '{word}' додано до комірки {address}.")
+        print(f"Новий вміст комірки {address}: {hash_table[address]}")
     return hash_table
-    
+
+
 def display_hash_table(table: list):
-    print("\n--- Хеш-таблиця (Відкрита адресація, M=13) ---")
-    print("Індекс | Слово")
-    print("-------|-------")
-    for i, item in enumerate(table):
-        value = item if item is not None else "(NULL)"
-        print(f"{i:02d} | {value}")
-    
-hash_table = build_closed_hash_table(WORDS, M)
+    print("\n--- Результат хешування (Таблиця M=13) ---")
+    for i, chain in enumerate(table):
+        print(f"Індекс {i:02d}: {chain}")
+        
+print(f"Розмір хеш-таблиці M = {M}")
+print(f"Список слів: {WORDS}")
+hash_table = build_open_hash_table(WORDS, M)
+print("\n----------------------------------------------------")
+
 display_hash_table(hash_table)
