@@ -10,7 +10,6 @@ LETTER_POSITIONS = {
     'Ш': 29, 'Щ': 30, 'Ь': 31, 'Ю': 32, 'Я': 33
 }
 
-
 def simple_hash_from_map(key: str) -> int:
     sum_of_positions = 0
     print(f"Сума позицій літер:", end="")
